@@ -23,7 +23,7 @@ flake8 = "^7.1.1"
 
 [tool.black]
 line-length = 119
-exclude = '''ыы
+exclude = '''
 (
   | \.git
 )
