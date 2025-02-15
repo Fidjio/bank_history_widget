@@ -32,3 +32,9 @@ def mask_account_card(info_from_the_client: str) -> str:
             return "Неверный номер карты!"
         else:
             return f"{number_card_or_check[:4]} {number_card_or_check[4:6]}** **** {number_card_or_check[-4:]}"
+
+
+def get_date(date: str) -> str:
+    """ Оставляет только дату из даты и времени """
+
+    return ".".join(reversed(date[0:10].split("-")))
