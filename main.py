@@ -1,6 +1,6 @@
-# from src.masks import get_mask_card_number, get_mask_account
-from src.widget import mask_account_card, get_date
 import os
+
+from src.widget import get_date, mask_account_card
 
 # Переменные
 PATH_TO_DATA = os.path.join(os.path.dirname(__file__), "data\\")

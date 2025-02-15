@@ -1,5 +1,6 @@
 from src.masks import get_mask_account, get_mask_card_number
 
+
 def mask_account_card(info_from_the_client: str) -> str:
     """ Маскировка номера карты или счета """
 
@@ -19,7 +20,6 @@ def mask_account_card(info_from_the_client: str) -> str:
         is_check = True
     else:
         is_check = False
-
 
     if is_check:
         # Маскировка номера счета
