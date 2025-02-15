@@ -3,7 +3,7 @@ def mask_account_card(info_from_the_client: str) -> str:
 
     # Извлечение номера карты/счета из строки
     number_card_or_check = ""
-    name_operations = ''
+    name_operations = ""
 
     # Получение номера карты/счета из данных пользователя
     for number in info_from_the_client:
@@ -11,7 +11,7 @@ def mask_account_card(info_from_the_client: str) -> str:
             number_card_or_check += number
         else:
             name_operations += number
-    name_operations = name_operations.replace(" ", "")
+    name_operations = name_operations.strip()
 
     # Выбор способа маскировки (счет/карта)
     if name_operations.lower() == "Счет".lower():
