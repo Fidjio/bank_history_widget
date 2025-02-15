@@ -1,7 +1,8 @@
+from src.masks import get_mask_account, get_mask_card_number
+
 def mask_account_card(info_from_the_client: str) -> str:
     """ Маскировка номера карты или счета """
 
-    # Извлечение номера карты/счета из строки
     number_card_or_check = ""
     name_operations = ""
 
@@ -19,19 +20,14 @@ def mask_account_card(info_from_the_client: str) -> str:
     else:
         is_check = False
 
-    # Маскировка номера счета
-    if is_check:
-        if len(number_card_or_check) < 6:
-            return "Введите корректный номер счета!"
-        else:
-            return f"**{number_card_or_check[-4:]}"
 
+    if is_check:
+        # Маскировка номера счета
+        result = get_mask_account(number_card_or_check)
     else:
         # Маскировка номера карты
-        if len(number_card_or_check) != 16:
-            return "Неверный номер карты!"
-        else:
-            return f"{number_card_or_check[:4]} {number_card_or_check[4:6]}** **** {number_card_or_check[-4:]}"
+        result = get_mask_card_number(number_card_or_check)
+    return result
 
 
 def get_date(date: str) -> str:
