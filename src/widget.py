@@ -1,9 +1,10 @@
-from src.masks import get_mask_account, get_mask_card_number
 from datetime import datetime as dt
+
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(info_from_the_client: str) -> str:
-    """ Маскировка номера карты или счета """
+    """Маскировка номера карты или счета"""
 
     number_card_or_check = ""
     name_operations = ""
@@ -32,8 +33,8 @@ def mask_account_card(info_from_the_client: str) -> str:
 
 
 def get_date(date: str) -> str:
-    """ Оставляет только дату из даты и времени """
+    """Оставляет только дату из даты и времени"""
     date_time = dt.strptime(date, "%Y-%m-%dT%H:%M:%S.%f")
-    date_time_str = dt.strftime(date_time, '%d.%m.%Y')
+    date_time_str = dt.strftime(date_time, "%d.%m.%Y")
 
     return date_time_str
