@@ -1,4 +1,5 @@
 from src.masks import get_mask_account, get_mask_card_number
+from datetime import datetime as dt
 
 
 def mask_account_card(info_from_the_client: str) -> str:
@@ -32,5 +33,7 @@ def mask_account_card(info_from_the_client: str) -> str:
 
 def get_date(date: str) -> str:
     """ Оставляет только дату из даты и времени """
+    date_time = dt.strptime(date, "%Y-%m-%dT%H:%M:%S.%f")
+    date_time_str = dt.strftime(date_time, '%d.%m.%Y')
 
-    return ".".join(reversed(date[0:10].split("-")))
+    return date_time_str
