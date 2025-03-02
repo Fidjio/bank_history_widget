@@ -19,16 +19,12 @@ def mask_account_card(info_from_the_client: str) -> str:
 
     # Выбор способа маскировки (счет/карта)
     if name_operations.lower() == "Счет".lower():
-        is_check = True
-    else:
-        is_check = False
-
-    if is_check:
         # Маскировка номера счета
         result = get_mask_account(number_card_or_check)
     else:
         # Маскировка номера карты
         result = get_mask_card_number(number_card_or_check)
+
     return result
 
 
