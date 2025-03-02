@@ -14,6 +14,7 @@
 ## Установка:
 *Не требует обязатеных условий.*
 + Слить проект из GitHub https://github.com/Fidjio/bank_history_widget.git
++ Запуск программы выполняестя из файла main.py в корне каталога *python main.py*
 
 ## Команда проекта
 Сергей Карсканов - Junior Python developer
