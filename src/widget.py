@@ -30,7 +30,26 @@ def mask_account_card(info_from_the_client: str) -> str:
 
 def get_date(date: str) -> str:
     """Оставляет только дату из даты и времени"""
-    date_time = dt.strptime(date, "%Y-%m-%dT%H:%M:%S.%f")
-    date_time_str = dt.strftime(date_time, "%d.%m.%Y")
 
-    return date_time_str
+    try:
+        # Переменная для хранения вариантов форматов дат
+        formats_date = ["%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"]
+        i = 0
+        for format_date in formats_date:
+            try:
+                date_time = dt.strptime(date, format_date)
+                date_time_str = dt.strftime(date_time, "%d.%m.%Y")
+            except Exception:
+                i += 1
+                pass
+        if i == 3:
+            raise ValueError
+        else:
+            return date_time_str
+    except ValueError:
+        return (
+            "Ошибка полученных данных. Введите дату в одном из форматов: \n"
+            "ГГ-мм-ддTчас:минута:секунда.миллисекунда\n"
+            "ГГ-мм-ддTчас:минута:секунда\n"
+            "ГГ-мм-дд"
+        )
