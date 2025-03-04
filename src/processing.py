@@ -1,6 +1,3 @@
-from isort.io import Empty
-
-
 def filter_by_state(list_of_operation_dictionaries: list[dict], state: str = "EXECUTED") -> list[dict] | str:
     """Принимает словарь с данными об операции и значение ключа state.
     Возвращает инфо об операции в зависимости от выбранного ключа"""
@@ -14,10 +11,11 @@ def filter_by_state(list_of_operation_dictionaries: list[dict], state: str = "EX
 
     return new_list_user_operations
 
-
-def sort_by_date(list_dict: list[dict], sort_key: bool = True) -> list[dict]:
+def sort_by_date(list_dict: list[dict], sort_key: bool = True) -> str | list[dict]:
     """Получает список словарей операций по картам/счетам клиента.
     Возвращает отсортированный список словарей по датам"""
-    new_list = sorted(list_dict, key=lambda list_dict: list_dict["date"], reverse=sort_key)
-
-    return new_list
+    try:
+        new_list = sorted(list_dict, key=lambda list_dict: list_dict["date"], reverse=sort_key)
+        return new_list
+    except KeyError:
+        return "Данного ключа не существует"
