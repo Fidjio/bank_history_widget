@@ -1,6 +1,6 @@
 import os
 
-from src.masks import get_mask_card_number, get_mask_account
+from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.widget import get_date, mask_account_card
 
@@ -13,13 +13,16 @@ if __name__ == "__main__":
 
     """Функции модуля masks.py"""
     # Функция get_mask_card_number
+    print("\nФункция get_mask_card_number:")
     print(get_mask_card_number("1111222233334444"))
 
     # Функция get_mask_account
+    print("\nФункция get_mask_account:")
     print(get_mask_account("88897745"))
 
     """Функции модуля processing.py"""
     # Функция filter_by_state
+    print("\nФункция filter_by_state:")
     print(
         filter_by_state(
             [
@@ -33,6 +36,7 @@ if __name__ == "__main__":
     )
 
     # Функция sort_by_date
+    print("\nФункция sort_by_date:")
     sorted_list_dict = sort_by_date(
         [
             {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
@@ -47,9 +51,11 @@ if __name__ == "__main__":
 
     """Функции модуля widget.py"""
     # Функция mask_account_card
+    print("\nФункция mask_account_card:")
     with open(PATH_TO_DATA + name_file, "r", encoding="utf-8") as file:
         for line in file:
             print(mask_account_card(line))
 
         # Функция get_date
+    print("\nФункция get_date:")
     print(get_date("2024-03-11T02:26:56"))
