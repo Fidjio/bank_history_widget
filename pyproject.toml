@@ -34,6 +34,7 @@ line-length = 119
 exclude = '''
 (
   | \.git
+  | htmlcov\
 )
 '''
 
@@ -51,4 +52,8 @@ multi_line_output = 1
 [tool.mypy]
 disallow_untyped_defs = true
 warn_return_any = true
-exclude = 'venv'
+exclude = [
+    'tests',
+    'venv',
+    'htmlcov'
+    ]

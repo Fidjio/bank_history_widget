@@ -14,6 +14,7 @@ def filter_by_state(list_of_operation_dictionaries: list[dict], state: str = "EX
 
     return new_list_user_operations
 
+
 def sort_by_date(list_dict: list[dict], sort_key: bool = True) -> str | list[dict]:
     """Получает список словарей операций по картам/счетам клиента.
     Возвращает отсортированный список словарей по датам"""
