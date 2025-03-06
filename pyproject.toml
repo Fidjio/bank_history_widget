@@ -21,11 +21,20 @@ isort = "^6.0.0"
 mypy = "^1.15.0"
 flake8 = "^7.1.1"
 
+
+[tool.poetry.group.tests.dependencies]
+pytest = "^8.3.5"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^6.0.0"
+
 [tool.black]
 line-length = 119
 exclude = '''
 (
   | \.git
+  | htmlcov\
 )
 '''
 
@@ -43,4 +52,8 @@ multi_line_output = 1
 [tool.mypy]
 disallow_untyped_defs = true
 warn_return_any = true
-exclude = 'venv'
+exclude = [
+    'tests',
+    'venv',
+    'htmlcov'
+    ]
