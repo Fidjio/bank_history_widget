@@ -60,11 +60,12 @@
 {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'}]
 `
 
+
 ### Модуль widget.py
 1. ***mask_account_card*** - маскировка номера карты или счета. Вызов функции:\
 `    with open(PATH_TO_DATA + name_file, "r", encoding="utf-8") as file:
         for line in file:
-            print(mask_account_card(line))`\ 
+            print(mask_account_card(line))`\
 -> \
 `1596 83** **** 5199 |
 **9589 |
@@ -77,6 +78,35 @@
 
 2. ***get_date*** - оставляет только дату из даты и времени. Вызов функции:\
 `print(get_date("2024-03-11T02:26:56"))` -> `11.03.2024`
+
+
+### Модуль generators.py
+1. ***filter_by_currency*** - принимает список словарей ->
+    возвращает итератор, который поочередно выдает транзакции,
+    где валюта операции соответствует заданной (например, USD). Вызов функции:\
+`usd_transactions = filter_by_currency(transactions, "USD")
+    try:
+        for _ in transactions:
+            print(next(usd_transactions))
+    except StopIteration:
+        pass`
+
+2. ***transaction_descriptions*** - принимает список словарей с транзакциями и
+    возвращает описание каждой операции по очереди. Вызов функции:\
+`descriptions = transaction_descriptions(transactions)
+    for description in descriptions:
+        print(description)` -> Перевод организации
+
+3. ***card_number_generator*** - выдает номера банковских карт в формате XXXX XXXX XXXX XXXX, где
+    X — цифра номера карты. Генератор может сгенерировать номера карт в заданном диапазоне
+    от 0000 0000 0000 0001 до 9999 9999 9999 9999.
+    Генератор принимает начальное и конечное значения для генерации диапазона номеров. Вызов функции:\
+`for card_number in card_number_generator(10, 13):
+        print(card_number)` -> \
+0000 0000 0000 0010 \
+0000 0000 0000 0011 \
+0000 0000 0000 0012
+
 
 ## Добавлены тесты для pytest. Список тестов:
 - Модуль test_masks.py
@@ -92,6 +122,12 @@
 - Модуль test_widget.py
     - test_mask_account_card
     - test_get_date
+
+- Модуль generators.py
+    - test_filter_by_currency
+    - test_transaction_descriptions
+    - test_param_transaction_descriptions
+    - test_card_number_generator
 
 ***Для хранения фикстур создан файл conftest.py***
 
