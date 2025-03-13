@@ -1,8 +1,7 @@
 # Тестирование функции filter_by_currency
 import pytest
 
-from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
-
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 
 def test_filter_by_currency(users_transactions, transactions_usd, transactions_none_code):
@@ -16,7 +15,6 @@ def test_filter_by_currency(users_transactions, transactions_usd, transactions_n
 
     gen = filter_by_currency([], "USD")
     assert list(gen) == [""]
-
 
 
 def test_transaction_descriptions(users_transactions, result_transaction_descriptions):
@@ -34,39 +32,37 @@ def test_transaction_descriptions(users_transactions, result_transaction_descrip
         next(gen)
 
 
-@pytest.mark.parametrize("transactions, result", [
-    ([{
-        "id": 939719570,
-        "state": "EXECUTED",
-        "date": "2018-06-30T02:08:58.425572",
-        "operationAmount": {
-            "amount": "9824.07",
-            "currency": {
-                "name": "USD"
-            }
-        }
-    }], "Нет транзакции или описания транзакции!"),
-
-    ([], "Нет транзакций"),
-
-    ([{
-        "id": 895315941,
-        "state": "EXECUTED",
-        "date": "2018-08-19T04:27:37.904916",
-        "operationAmount":
-            {
-                "amount": "56883.54",
-                "currency":
+@pytest.mark.parametrize(
+    "transactions, result",
+    [
+        (
+            [
                 {
-                    "name": "USD",
-                    "code": "USD"
+                    "id": 939719570,
+                    "state": "EXECUTED",
+                    "date": "2018-06-30T02:08:58.425572",
+                    "operationAmount": {"amount": "9824.07", "currency": {"name": "USD"}},
                 }
-            },
-        "description": "Перевод с карты на карту",
-        "from": "Visa Classic 6831982476737658",
-        "to": "Visa Platinum 8990922113665229"
-    }], "Перевод с карты на карту")
-    ])
+            ],
+            "Нет транзакции или описания транзакции!",
+        ),
+        ([], "Нет транзакций"),
+        (
+            [
+                {
+                    "id": 895315941,
+                    "state": "EXECUTED",
+                    "date": "2018-08-19T04:27:37.904916",
+                    "operationAmount": {"amount": "56883.54", "currency": {"name": "USD", "code": "USD"}},
+                    "description": "Перевод с карты на карту",
+                    "from": "Visa Classic 6831982476737658",
+                    "to": "Visa Platinum 8990922113665229",
+                }
+            ],
+            "Перевод с карты на карту",
+        ),
+    ],
+)
 def test_param_transaction_descriptions(transactions, result):
     gen = transaction_descriptions(transactions)
 
@@ -76,8 +72,13 @@ def test_param_transaction_descriptions(transactions, result):
         next(gen)
 
 
-@pytest.mark.parametrize("start, stop, result", [
-    (1, 11, [
+@pytest.mark.parametrize(
+    "start, stop, result",
+    [
+        (
+            1,
+            11,
+            [
                 "0000 0000 0000 0001",
                 "0000 0000 0000 0002",
                 "0000 0000 0000 0003",
@@ -88,16 +89,12 @@ def test_param_transaction_descriptions(transactions, result):
                 "0000 0000 0000 0008",
                 "0000 0000 0000 0009",
                 "0000 0000 0000 0010",
-            ]),
-
-    (20, 23, [
-                "0000 0000 0000 0020",
-                "0000 0000 0000 0021",
-                "0000 0000 0000 0022"
-                ]),
-
-    (9999999999999998, 10000000000000000, ["Вы вышли за рамки диапазона"])
-])
+            ],
+        ),
+        (20, 23, ["0000 0000 0000 0020", "0000 0000 0000 0021", "0000 0000 0000 0022"]),
+        (9999999999999998, 10000000000000000, ["Вы вышли за рамки диапазона"]),
+    ],
+)
 def test_card_number_generator(start, stop, result):
     gen = card_number_generator(start, stop)
     assert list(gen) == result
