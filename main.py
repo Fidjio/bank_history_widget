@@ -1,5 +1,6 @@
 import os
 
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
 from src.widget import get_date, mask_account_card
@@ -56,6 +57,97 @@ if __name__ == "__main__":
         for line in file:
             print(mask_account_card(line))
 
-        # Функция get_date
+    # Функция get_date
     print("\nФункция get_date:")
     print(get_date("2024-03-11T02:26:56"))
+
+    # Функция filter_by_currency
+    # transactions = [{
+    #     "id": 939719570,
+    #     "state": "EXECUTED",
+    #     "date": "2018-06-30T02:08:58.425572",
+    #     "operationAmount": {
+    #         "amount": "9824.07",
+    #         "currency": {
+    #             "name": "USD",
+    #             "code": "USD"
+    #         }
+    #     },
+    #     "description": "Перевод организации",
+    #     "from": "Счет 75106830613657916952",
+    #     "to": "Счет 11776614605963066702"
+    # },
+    # {
+    #     "id": 142264268,
+    #     "state": "EXECUTED",
+    #     "date": "2019-04-04T23:20:05.206878",
+    #     "operationAmount": {
+    #         "amount": "79114.93",
+    #         "currency": {
+    #             "name": "USD",
+    #             "code": "USD"
+    #         }
+    #     },
+    #     "description": "Перевод со счета на счет",
+    #     "from": "Счет 19708645243227258542",
+    #     "to": "Счет 75651667383060284188"
+    # },
+    # {
+    #     "id": 102,
+    #     "state": "EXECUTED",
+    #     "date": "2019-04-04T23:20:05.206878",
+    #     "operationAmount": {
+    #         "amount": "79114.93",
+    #         "currency": {
+    #             "name": "RUB",
+    #             "code": "RUB"
+    #         }
+    #     },
+    #     "description": "Перевод со счета на счет",
+    #     "from": "Счет 19708645243227258542",
+    #     "to": "Счет 75651667383060284188"
+    # },
+    # {
+    #     "id": 101,
+    #     "state": "EXECUTED",
+    #     "date": "2019-04-04T23:20:05.206878",
+    #     "operationAmount": {
+    #         "amount": "79114.93",
+    #         "currency": {
+    #             "name": "USD",
+    #             "code": "USD"
+    #         }
+    #     },
+    #     "description": "dzgdfgzdfg",
+    #     "from": "Счет 19708645243227258542",
+    #     "to": "Счет 75651667383060284188"
+    # },
+    # {
+    #     "id": 105,
+    #     "state": "EXECUTED",
+    #     "date": "2019-04-04T23:20:05.206878",
+    #     "operationAmount": {
+    #         "amount": "79114.93",
+    #         "currency": {
+    #             "name": "USD",
+    #             "code": "USD"
+    #         }
+    #     },
+    #     "description": "Перевод со счета на счет",
+    #     "from": "Счет 19708645243227258542",
+    #     "to": "Счет 75651667383060284188"
+    # },]
+    # usd_transactions = filter_by_currency(transactions, "USD")
+    # try:
+    #     for _ in transactions:
+    #         print(next(usd_transactions))
+    # except StopIteration:
+    #     pass
+    #
+    # for card_number in card_number_generator(10, 15):
+    #     print(card_number)
+    # transactions = [{}]
+    #
+    # descriptions = transaction_descriptions(transactions)
+    # for description in descriptions:
+    #     print(description)
