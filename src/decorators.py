@@ -22,6 +22,7 @@ def log(filename: str = "") -> Callable[..., Any]:
             try:
                 result = func(*args, **kwargs)
                 if filename != "":
+                    logging.getLogger().handlers.clear()
                     logging.basicConfig(
                         filename=os.path.join(PATH_TO_LOGS, filename),
                         filemode="w",
@@ -31,6 +32,7 @@ def log(filename: str = "") -> Callable[..., Any]:
                         level=logging.INFO,
                     )
                 else:
+                    logging.getLogger().handlers.clear()
                     logging.basicConfig(
                         format="%(asctime)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.INFO
                     )
@@ -41,6 +43,7 @@ def log(filename: str = "") -> Callable[..., Any]:
             except Exception as e:
                 # Выбираем настройки вывода logging (вывод в консоль/запись в файл)
                 if filename != "":
+                    logging.getLogger().handlers.clear()
                     logging.basicConfig(
                         filename=os.path.join(PATH_TO_LOGS, filename),
                         filemode="w",
@@ -50,6 +53,7 @@ def log(filename: str = "") -> Callable[..., Any]:
                         level=logging.INFO,
                     )
                 else:
+                    logging.getLogger().handlers.clear()
                     logging.basicConfig(
                         format="%(asctime)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S", level=logging.INFO
                     )

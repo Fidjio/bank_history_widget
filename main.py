@@ -164,14 +164,13 @@ if __name__ == "__main__":
 
     with tempfile.NamedTemporaryFile(dir=custom_dir, delete=False) as temp_file:
         filename = temp_file.name
-        print(filename)
         fil = os.path.basename(filename)
-        print(fil)
-    @log()
+
+    @log(fil)
     def get_func_to_log(func, *args, **kwargs):
         return func(*args, **kwargs)
 
     def summ_(a, b):
         return a + b
 
-    get_func_to_log(summ_, 2, "4")
+    get_func_to_log(summ_, 2, 4)
