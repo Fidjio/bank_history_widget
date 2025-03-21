@@ -108,6 +108,32 @@
 0000 0000 0000 0012
 
 
+### Модуль generators.py
+1. ***log*** - декоратор, который выводит логи декорируемой функции в консоль
+    или записывает их в файл. Декоратор принимает необязательный аргумент filename - имя файла,
+    в который будут записаны логи. Если имя файла не указано, логи будут выведены в консоль. Вызов функции:\
+Декорируем функцию с помощью декоратора log -> \
+`@log(filename="FILENAME")
+def get_func_to_log(func, *args, **kwargs):
+    return func(*args, **kwargs)`
+Вызываем функцию, которую декорировали и передаем ей значения -> \
+`get_func_to_log(func, args)`, где \
+*func* - функция, из которой нужно извлечь логи \
+*args* - аргументы функции, из которой нужно извлечь логи \
+
+Вывод, если ошибки не было -> \
+*2025-03-21 17:03:27: Name functions: *NAME_FUNC* -> ok.\
+2025-03-21 17:03:27: Result functions: *RESULT_FUNC**
+
+Вывод, если произошла ошибка в функции -> \
+*2025-03-21 17:04:19: \
+Function stopped.\
+Name function: summ_\
+Error: TypeError.\
+Сообщение исключения: unsupported operand type(s) for +: 'int' and 'str'.\
+Inputs: ((2, '4'), {})*
+
+
 ## Добавлены тесты для pytest. Список тестов:
 - Модуль test_masks.py
     - test_card_mask
@@ -123,11 +149,17 @@
     - test_mask_account_card
     - test_get_date
 
-- Модуль generators.py
+- Модуль test_generators.py
+
     - test_filter_by_currency
     - test_transaction_descriptions
     - test_param_transaction_descriptions
     - test_card_number_generator
+
+- Модуль test_decorators.py
+    - test_decorator_log_not_error
+    - test_decorator_log_with_error
+
 
 ***Для хранения фикстур создан файл conftest.py***
 

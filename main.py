@@ -167,11 +167,11 @@ if __name__ == "__main__":
         print(filename)
         fil = os.path.basename(filename)
         print(fil)
-    @log(fil)
+    @log()
     def get_func_to_log(func, *args, **kwargs):
         return func(*args, **kwargs)
 
     def summ_(a, b):
         return a + b
 
-    get_func_to_log(summ_, 2, 4)
+    get_func_to_log(summ_, 2, "4")
