@@ -200,3 +200,11 @@ def result_transaction_descriptions():
         "Перевод с карты на карту",
         "",
     ]
+
+
+@pytest.fixture
+def log_get_date_2025_12_25():
+    return (
+        "INFO     root:decorators.py:38 Name functions: get_date -> ok.\n"
+        "INFO     root:decorators.py:39 Result functions: 25.12.2025\n"
+    )
