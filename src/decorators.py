@@ -16,16 +16,15 @@ def log(filename: str = "") -> Callable[..., Any]:
         """Описание выше"""
 
         @wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> str:
-            """Функция обрабатывает функцию и ее исключения,
+        def wrapper(*args: Any, **kwargs: Any) -> None:
+            """Функция выполняет функцию и обрабатывает ее исключения,
             и логирует результат (ошибка или успешное выполнение функции)"""
             try:
                 result = func(*args, **kwargs)
-
                 if filename != "":
                     logging.basicConfig(
                         filename=os.path.join(PATH_TO_LOGS, filename),
-                        filemode="a",
+                        filemode="w",
                         encoding="UTF-8",
                         format="%(asctime)s: %(message)s",
                         datefmt="%Y-%m-%d %H:%M:%S",
@@ -37,14 +36,14 @@ def log(filename: str = "") -> Callable[..., Any]:
                     )
                 logging.info(f"Name functions: {args[0].__name__} -> ok.")
                 logging.info(f"Result functions: {result}")
-                return ""
+                logging.shutdown()
 
             except Exception as e:
                 # Выбираем настройки вывода logging (вывод в консоль/запись в файл)
                 if filename != "":
                     logging.basicConfig(
                         filename=os.path.join(PATH_TO_LOGS, filename),
-                        filemode="a",
+                        filemode="w",
                         encoding="UTF-8",
                         format="%(asctime)s: %(message)s",
                         datefmt="%Y-%m-%d %H:%M:%S",
@@ -62,7 +61,7 @@ def log(filename: str = "") -> Callable[..., Any]:
                     f"Сообщение исключения: {str(e)}.\n"
                     f"Inputs: {args[1:], kwargs}\n\n"
                 )
-                return ""
+                logging.shutdown()
 
         return wrapper
 
