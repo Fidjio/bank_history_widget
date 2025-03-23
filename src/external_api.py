@@ -9,8 +9,7 @@ API_KEY = os.getenv("API_KEY")
 
 
 def convert_amount(transaction: Any) -> Any:
-    """Принимает сумму транзакции и код валюты (например, USD) и
-    возвращает сумму транзакции в рублях"""
+    """ Принимает список транзакций и возвращает сумму транзакции в рублях"""
     try:
         code_ru = "RUB"
         code_transaction = transaction["operationAmount"]["currency"]["code"]

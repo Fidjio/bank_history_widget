@@ -134,6 +134,34 @@ Error: TypeError.\
 Inputs: ((2, '4'), {})*
 
 
+### Модуль utils.py
+1. ***get_info_transactions_json*** - функция, которая возвращает список словарей из 
+json-файла с данными о финансовых транзакциях пользователей. Вызов функции ->\
+`get_info_transactions_json(path: str)`, где *path* - абсолютный путь к файлу json.\
+Вывод функции ->\
+`{
+        "id": 441945886,
+        "state": "EXECUTED",
+        "date": "2019-08-26T10:50:58.294041",
+        "operationAmount": {"amount": "31957.58", "currency": {"name": "руб.", "code": "RUB"}},
+        "description": "Перевод организации",
+        "from": "Maestro 1596837868705199",
+        "to": "Счет 64686473678894779589",
+    }`
+
+
+### Модуль external_api.py
+1. ***convert_amount*** - функция, которая принимает сумму транзакции и код валюты (например, USD) и
+    возвращает сумму транзакции в рублях. Для работы функции используется API APILAYER. Ссыла на API
+https://apilayer.com/marketplace/exchangerates_data-api. 
+Для работы функции необходимо зарегистрироваться на сайте API и скопировать API ключ. Далее, ключ, 
+необходимо добавить в файл .env *API_KEY=your api key*. Вызов функции ->\
+`transactions = get_info_transactions_json(path)
+print(convert_amount(transactions[0]))`, где path - путь к json-файлу со списком словарей 
+транзакций, которые необходимо конвертировать. Вывод функции -> \
+`*200.00*` - сумма транзакций в рублях.
+
+
 ## Добавлены тесты для pytest. Список тестов:
 - Модуль test_masks.py
     - test_card_mask
@@ -160,8 +188,18 @@ Inputs: ((2, '4'), {})*
     - test_decorator_log_not_error
     - test_decorator_log_with_error
 
+- Модуль test_utils.py
+    - test_get_info_transactions_json
+
+- Модуль test_external.py
+    - test_convert_amount
+    - test_convert_amount_type
+
 
 ***Для хранения фикстур создан файл conftest.py***
+
+***Для хранения секретных данных используейте .env.example, предварительно сменив расширение 
+на .env.***
 
 
 ## Установка:
