@@ -46,5 +46,5 @@ def card_number_generator(start_num: int, stop_num: int) -> Generator[str | Lite
             yield "Вы вышли за рамки диапазона"
             return
         number_card = number_card[: -len(str(i))] + str(i)
-        num_card_result = " ".join([number_card[i:i + 4] for i in range(0, len(number_card), 4)])
+        num_card_result = " ".join([number_card[i: i + 4] for i in range(0, len(number_card), 4)])
         yield num_card_result
