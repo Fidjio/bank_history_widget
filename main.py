@@ -1,3 +1,4 @@
+import json
 import os
 import tempfile
 
@@ -5,7 +6,11 @@ from src.decorators import log
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
+from src.utils import get_info_transactions_json
 from src.widget import get_date, mask_account_card
+from src.external_api import convert_amount
+
+
 
 # Переменные
 PATH_TO_DATA = os.path.join(os.path.dirname(__file__), "data\\")
@@ -160,17 +165,28 @@ if __name__ == "__main__":
     #
     # get_func_to_log(get_date, get_date)
 
-    custom_dir = os.path.abspath("./logs")
+    # custom_dir = os.path.abspath("./logs")
+    #
+    # with tempfile.NamedTemporaryFile(dir=custom_dir, delete=False) as temp_file:
+    #     filename = temp_file.name
+    #     fil = os.path.basename(filename)
+    #
+    # @log(fil)
+    # def get_func_to_log(func, *args, **kwargs):
+    #     return func(*args, **kwargs)
+    #
+    # def summ_(a, b):
+    #     return a + b
+    #
+    # get_func_to_log(summ_, 2, 4)
 
-    with tempfile.NamedTemporaryFile(dir=custom_dir, delete=False) as temp_file:
-        filename = temp_file.name
-        fil = os.path.basename(filename)
+    # print(get_info_transactions_json("D:\\skypro\\bank_history_widget\\data\\operations.json"))
+    #
 
-    @log(fil)
-    def get_func_to_log(func, *args, **kwargs):
-        return func(*args, **kwargs)
+    transactions = get_info_transactions_json("D:\\skypro\\bank_history_widget\\data\\operations.json")
 
-    def summ_(a, b):
-        return a + b
 
-    get_func_to_log(summ_, 2, 4)
+    print(convert_amount(transactions[1]))
+
+    # print(convert_amount(2000.0, "EUR"))
+
