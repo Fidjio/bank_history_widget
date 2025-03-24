@@ -180,13 +180,11 @@ if __name__ == "__main__":
     #
     # get_func_to_log(summ_, 2, 4)
 
-    # print(get_info_transactions_json("D:\\skypro\\bank_history_widget\\data\\operations.json"))
-    #
-
-    transactions = get_info_transactions_json("D:\\skypro\\bank_history_widget\\data\\operations.json")
-
-
-    print(convert_amount(transactions[1]))
-
+    # transactions = get_info_transactions_json("D:\\skypro\\bank_history_widget\\data\\operations.json")
+    # print(convert_amount(transactions[1]))
     # print(convert_amount(2000.0, "EUR"))
 
+    # print(get_info_transactions_json("D:\\skypro\\bank_history_widget\\data\\operations.json"))
+
+    # print(get_mask_card_number([]))
+    # print(get_mask_account(get_mask_card_number))
