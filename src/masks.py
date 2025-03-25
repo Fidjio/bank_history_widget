@@ -1,18 +1,51 @@
-def get_mask_card_number(number_card: str) -> str:
+import logging
+
+time_format = "%Y-%m-%d %H:%M:%S"
+logger = logging.getLogger("masks")
+file_handler = logging.FileHandler("logs/masks.log", "w", encoding="UTF-8")
+logger.setLevel(logging.DEBUG)
+file_formatter = logging.Formatter(
+    "%(asctime)s: %(filename)s - func: %(funcName)s. " "%(levelname)s: %(message)s", datefmt=time_format
+)
+file_handler.setFormatter(file_formatter)
+logger.addHandler(file_handler)
+
+
+def get_mask_card_number(number_card: str) -> str | None:
     """Маскирует номер банковской карты"""
-    if len(number_card) != 16 or not number_card.isdigit():
-        strip_number_card = number_card.replace(" ", "")
+    try:
+        logger.info("функция начала работу -> continue")
+        if len(number_card) != 16 or not number_card.isdigit():
+            logger.warning("попытка задать формат номера карты..")
 
-        if len(strip_number_card) != 16 or not strip_number_card.isdigit():
-            return "Неверный номер карты!"
-        return f"{strip_number_card[:4]} {strip_number_card[4:6]}** **** {strip_number_card[-4:]}"
+            strip_number_card = number_card.replace(" ", "")
 
-    return f"{number_card[:4]} {number_card[4:6]}** **** {number_card[-4:]}"
+            if len(strip_number_card) != 16 or not strip_number_card.isdigit():
+                logger.warning("неверный формат номера карты")
+                return "Неверный номер карты!"
+
+            logger.info("форматирование номера карты -> ok")
+            logger.info("функция выполнена - ok")
+            return f"{strip_number_card[:4]} {strip_number_card[4:6]}** **** {strip_number_card[-4:]}"
+
+        logger.info("функция выполнена - ok")
+        return f"{number_card[:4]} {number_card[4:6]}** **** {number_card[-4:]}"
+    except Exception as ex:
+        logger.critical(f"произошла ошибка: {ex}")
+        return None
 
 
-def get_mask_account(account_number: str) -> str:
+def get_mask_account(account_number: str) -> str | None:
     """Маскирует номер банковского счета"""
-    if len(account_number) < 6:
-        return "Введите корректный номер счета!"
-    else:
-        return f"**{account_number[-4:]}"
+    try:
+        logger.info("функция начала работу -> continue")
+        if len(account_number) < 6:
+            logger.warning("неверный формат номера карты")
+            return "Введите корректный номер счета!"
+        else:
+            logger.info("функция выполнена - ok")
+            return f"**{account_number[-4:]}"
+
+    except Exception as ex:
+        logger.critical(f"произошла ошибка: {ex}")
+        return None
