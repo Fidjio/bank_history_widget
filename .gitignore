@@ -179,3 +179,5 @@ cython_debug/
 # Hidden API data
 .env
 *.json
+*.csv
+*.xlsx
