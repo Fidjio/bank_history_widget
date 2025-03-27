@@ -1,4 +1,5 @@
 import pytest
+import pandas as pd
 
 
 @pytest.fixture
@@ -228,3 +229,33 @@ def transaction_test_value_200():
     return {
         "operationAmount": {"amount": 200.00, "currency": {"code": "USD"}},
     }
+
+
+@pytest.fixture
+def info_transactions_csv():
+    df = pd.DataFrame({
+        'Bob': ['Мне это понравилось.', 'Это было ужасно.'],
+        'Sue': ['Довольно хорошо.', 'Без вкуса.']
+    })
+
+
+@pytest.fixture
+def info_to_test_read_files():
+    df = [{'id': '650703', 'state': 'EXECUTED', 'date': '2023-09-05T11:30:32Z', 'amount': '16210', 'currency_name': 'Sol',
+      'currency_code': 'PEN', 'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397',
+      'description': 'Перевод организации'},
+     {'id': '3598919', 'state': 'CANCELED', 'date': '2020-12-06T23:00:58Z', 'amount': '29740', 'currency_name': 'Peso',
+      'currency_code': 'COP', 'from': 'Discover 3172601889670065', 'to': 'Discover 0720428384694643',
+      'description': 'Перевод с карты на карту'}]
+
+    return df
+
+
+@pytest.fixture
+def info_csv():
+    csv_data = """id;state;date;amount;currency_name;currency_code;from;to;description
+                650703;EXECUTED;2023-09-05T11:30:32Z;16210;Sol;PEN;Счет 58803664561298323391;
+                Счет 39745660563456619397;Перевод организации
+                3598919;EXECUTED;2020-12-06T23:00:58Z;29740;Peso;COP;Discover 3172601889670065;
+                Discover 0720428384694643;Перевод с карты на карту]"""
+    return csv_data
