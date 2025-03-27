@@ -162,6 +162,22 @@ print(convert_amount(transactions[0]))`, где path - путь к json-файл
 `*200.00*` - сумма транзакций в рублях.
 
 
+
+### Модуль read_file_from_pandas.py
+1. ***read_cvs_files*** - функция для считывания финансовых операций из CSV принимает путь
+    к файлу CSV в качестве аргумента выдает список словарей с транзакциями. Вызов функции ->\
+`print(read_cvs_files(path_to_file))`, где path_to_file - путь до файла csv. Вывод функции ->\
+`[{'id': '650703', 'state': 'EXECUTED', 'date': '2023-09-05T11:30:32Z', 'amount': '16210', 'currency_name': 'Sol',
+      'currency_code': 'PEN', 'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397',
+      'description': 'Перевод организации'}]`
+2. ***read_excel_files*** - функция для считывания финансовых операций из Excel, 
+которая принимает путь к файлу Excel в качестве аргумента и выдает список словарей 
+с транзакциями. Вызов функции ->\
+`print(read_excel_files('path_to_file'))`, где path_to_file - путь до файла csv. Вывод функции ->\
+`[{'id': '650703', 'state': 'EXECUTED', 'date': '2023-09-05T11:30:32Z', 'amount': '16210', 'currency_name': 'Sol',
+   'currency_code': 'PEN', 'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397',
+   'description': 'Перевод организации'}]`
+
 ## Добавлены тесты для pytest. Список тестов:
 - Модуль test_masks.py
     - test_card_mask
@@ -195,6 +211,13 @@ print(convert_amount(transactions[0]))`, где path - путь к json-файл
     - test_convert_amount
     - test_convert_amount_type
 
+- Модуль test_read_file_pd.py
+    - test_read_cvs_files
+    - test_read_cvs_file_empty
+    - test_read_excel_files_success
+    - test_read_excel_files_file_not_found
+    - test_read_excel_files_invalid_data
+
 
 ***Для хранения фикстур создан файл conftest.py***
 
@@ -205,6 +228,7 @@ print(convert_amount(transactions[0]))`, где path - путь к json-файл
 ## Установка:
 *Не требует обязательных условий.*
 * Установить Poetry `pip install poetry`
+* Установить завиимости проекта.
 + Слить проект из GitHub https://github.com/Fidjio/bank_history_widget.git
 + Запуск программы выполняестя из файла main.py в корне каталога *python main.py*
 
