@@ -2,10 +2,13 @@ import json
 import os
 import tempfile
 
+import pandas as pd
+
 from src.decorators import log
 from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 from src.masks import get_mask_account, get_mask_card_number
 from src.processing import filter_by_state, sort_by_date
+from src.read_file_from_pandas import read_cvs_files, read_excel_files
 from src.utils import get_info_transactions_json
 from src.widget import get_date, mask_account_card
 from src.external_api import convert_amount
@@ -188,3 +191,6 @@ if __name__ == "__main__":
 
     # print(get_mask_card_number([]))
     # print(get_mask_account(get_mask_card_number))
+
+    print(read_cvs_files('data\\transactions.csv'))
+    # print(read_excel_files('data\\transactions_excel.xlsx'))
