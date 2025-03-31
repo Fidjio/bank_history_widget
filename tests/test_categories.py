@@ -1,4 +1,5 @@
 import pytest
+
 from src.processing import get_count_category  # Замените your_module на имя вашего модуля
 
 # Тестовые данные

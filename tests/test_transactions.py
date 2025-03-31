@@ -2,7 +2,6 @@ import pytest
 
 from src.processing import search_transaction
 
-
 # Простые тестовые данные
 
 TEST_DATA = [
