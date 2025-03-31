@@ -3,7 +3,7 @@ from typing import Any, Generator, Iterator, LiteralString, Optional
 
 def filter_by_currency(
     transactions: list[dict[str, Any]], currency: str
-) -> (Generator)[str | dict[str, Any], None, None]:
+) -> Generator[str | dict[str, Any], None, None]:
     """Принимает список словарей ->
     возвращает итератор, который поочередно выдает транзакции,
     где валюта операции соответствует заданной (например, USD)"""
@@ -12,7 +12,7 @@ def filter_by_currency(
         if count_transactions == 0:
             yield ""
         for dict_ in transactions:
-            if dict_["operationAmount"]["currency"]["code"] == currency:
+            if dict_.get("operationAmount", {}).get("currency", {}).get("code", {}) == currency:
                 yield dict_
     except KeyError:
         pass

@@ -1,5 +1,7 @@
-from unittest.mock import patch, mock_open, MagicMock
+from unittest.mock import MagicMock, mock_open, patch
+
 import pandas as pd
+
 from src.read_file_from_pandas import read_cvs_files, read_excel_files
 
 

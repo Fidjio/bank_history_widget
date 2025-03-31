@@ -56,10 +56,13 @@ line_length = 119
 multi_line_output = 1
 
 [tool.mypy]
-disallow_untyped_defs = true
+python_version = ">=3.13"
 warn_return_any = true
+disallow_untyped_defs = true
 exclude = [
-    'tests',
-    'venv',
-    'htmlcov'
+    "tests/",
+    ".venv/",
+    "htmlcov/",
+    "conftest.py",
+    "main.py"
     ]

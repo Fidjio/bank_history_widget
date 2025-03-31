@@ -24,7 +24,7 @@ def get_info_transactions_json(path: str) -> list[Any] | None | Any:
 
             if info_json:
                 logger.info("чтение файла прошло успешно")
-                return info_json
+        return info_json
 
     except TypeError as ex:
         logger.critical(f"произошла ошибка: {ex}")

@@ -25,7 +25,7 @@ def mask_account_card(info_from_the_client: str) -> str:
         # Маскировка номера карты
         result = get_mask_card_number(number_card_or_check)
 
-    return result
+    return f'{name_operations} {result}'
 
 
 def get_date(date: str) -> str:
@@ -33,7 +33,7 @@ def get_date(date: str) -> str:
 
     try:
         # Переменная для хранения вариантов форматов дат
-        formats_date = ["%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d"]
+        formats_date = ["%Y-%m-%dT%H:%M:%S.%f", "%Y-%m-%dT%H:%M:%S", "%Y-%m-%d", "%Y-%m-%dT%H:%M:%SZ"]
         i = 0
         for format_date in formats_date:
             try:
@@ -42,7 +42,7 @@ def get_date(date: str) -> str:
             except Exception:
                 i += 1
                 pass
-        if i == 3:
+        if i == len(formats_date):
             raise ValueError
         else:
             return date_time_str
