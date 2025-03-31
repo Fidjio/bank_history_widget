@@ -2,9 +2,10 @@
 
 Данный виджет получает данные о карте или счете от клиента, обрабатывает и возвращает редактированную информацию.
 Виды обработки информации представлены ниже в разделе **"Реализованные функции"**
+Запуск программы происходит через запуск main.py
 
 ## Статус проекта:
-+ Статус разработки: *в разработке*
++ Статус разработки: готов.
 
 ## Технологии: 
 + Python
@@ -59,6 +60,20 @@
 {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'},
 {'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'}]
 `
+3. ***search_transaction*** - Принимает список словарей с данными о банковских операциях и строку поиска.
+    Возвращает список словарей, у которых в описании есть данная строка. Вызов функции:\
+`search_transaction(dict_transactions, str_search)`\
+-> \
+[{'price': 15, 'description': 'Перевод'}, {'price': 2323, 'description': 'Перевод в банк'}]
+
+4. ***get_count_category*** - Принимает список словарей с данными о банковских операциях и список категорий операций.
+    Возвращает словарь, в котором ключи — это названия категорий,
+    а значения — это количество операций в каждой категории.
+    Категории операций хранятся в поле description. Вызов функции:\
+`get_count_category(dict_transactions, []`\
+-> \
+[{'price': 15, 'description': 'Перевод'}, {'price': 30, 'description': 'Перевод', }]
+ 
 
 
 ### Модуль widget.py
@@ -217,6 +232,19 @@ print(convert_amount(transactions[0]))`, где path - путь к json-файл
     - test_read_excel_files_success
     - test_read_excel_files_file_not_found
     - test_read_excel_files_invalid_data
+
+- Модуль test_categories.py
+  - test_count_existing_categories
+  - test_count_with_missing_category
+  - test_empty_categories_list
+  - test_empty_transactions
+  - test_case_sensitivity
+
+- Модуль test_transactions.py
+  - test_find_full_match
+  - test_find_partial_match
+  - test_no_matches
+  - test_empty_search
 
 
 ***Для хранения фикстур создан файл conftest.py***
