@@ -1,196 +1,120 @@
+import csv
 import json
 import os
-import tempfile
 
-import pandas as pd
-
-from src.decorators import log
-from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
-from src.masks import get_mask_account, get_mask_card_number
-from src.processing import filter_by_state, sort_by_date
+from src.generators import filter_by_currency
+from src.processing import filter_by_state, search_transaction, sort_by_date
 from src.read_file_from_pandas import read_cvs_files, read_excel_files
 from src.utils import get_info_transactions_json
 from src.widget import get_date, mask_account_card
-from src.external_api import convert_amount
+from tests.conftest import result_sort_date
 
 
+def main() -> None:
+    list_files = ["JSON", "CSV", "XLSX"]
+    path_to_files = {
+        "JSON": "data\\operations.json",
+        "CSV": "data\\transactions.csv",
+        "XLSX": "data\\transactions_excel.xlsx",
+    }
+    path_to_file = str()
+    func_to_open_file = {"JSON": get_info_transactions_json, "CSV": read_cvs_files, "XLSX": read_excel_files}
+    states = ["EXECUTED", "CANCELED", "PENDING"]
+    filter_transactions_dict = dict
 
-# Переменные
-PATH_TO_DATA = os.path.join(os.path.dirname(__file__), "data\\")
-name_file = "numbers_card_or_check.txt"
+    ####################################################################################################
+
+    # Выбор файла для обработки транзакций
+    print("    Программа: Привет! Добро пожаловать в программу работы" "с банковскими транзакциями.")
+    while True:
+        try:
+            user_num_file = input(
+                """
+        Выберите необходимый пункт меню:
+        
+    1. Получить информацию о транзакциях из JSON-файла
+    2. Получить информацию о транзакциях из CSV-файла
+    3. Получить информацию о транзакциях из XLSX-файла
+    
+    Пользователь: """
+            )
+            extension_file_user = list_files[int(user_num_file) - 1]
+            print(f"Программа: Для обработки выбран {extension_file_user}-файл")
+            for extension, path_ in path_to_files.items():
+                if extension == extension_file_user:
+                    path_to_file = path_
+            break
+
+        except (TypeError, IndexError, ValueError):
+            print(f"\nВведите цифру от 1 до 3.")
+
+    # Выбор статуса для фильтрации транзакций и фильтрация файла
+    while True:
+        try:
+            state = (
+                input(
+                    "Программа: Введите статус, по которому необходимо выполнить фильтрацию.\n"
+                    "Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n"
+                    "Пользователь: "
+                )
+                .upper()
+                .strip()
+            )
+
+            if state in states:
+                for extension, func_reader in func_to_open_file.items():
+                    if extension == extension_file_user:
+                        info_in_file = func_reader(path_to_file)
+                        filter_transactions_dict = filter_by_state(info_in_file, str(state))
+                        print(f'Программа: Операции отфильтрованы по статусу "{state}"')
+                break
+            else:
+                print(f"Программа: Статус операции {state} недоступен.")
+        except Exception as ex:
+            print(f"Произошло исключение: {ex}")
+
+    # Выбор сортировки полученного словаря filter_transactions_dict
+    while True:
+        user_input = input("Программа: Отсортировать операции по дате? Да/Нет\nПользователь: ")
+        if user_input.lower() == "да":
+            flag_ = input("Программа: Отсортировать по возрастанию или по убыванию?\nПользователь: ")
+            if flag_.lower() == "по убыванию":
+                filter_transactions_dict = sort_by_date(filter_transactions_dict)
+            elif flag_.lower() == "по возрастанию":
+                filter_transactions_dict = sort_by_date(filter_transactions_dict, False)
+
+        user_input = input("Программа: Выводить только рублевые транзакции? Да/Нет\nПользователь: ")
+        if user_input.lower() == "да":
+            filter_transactions_dict = list(filter_by_currency(filter_transactions_dict, "RUB"))
+
+        user_input = input(
+            "Программа: Отфильтровать список транзакций по определенному слову " "в описании? Да/Нет\nПользователь: "
+        )
+        if user_input.lower() == "да":
+            description = input("Программа: Введите слово для поиска.\nПользователь: ")
+            filter_transactions_dict = search_transaction(filter_transactions_dict, description)
+        break
+
+    print("Программа: Распечатываю итоговый список транзакций...\n")
+
+    # Вывод транзакций
+    print(f"Программа: Всего банковских операций в выборке: {len(filter_transactions_dict)}")
+    # if extension_file_user == 'JSON':
+    for dict_ in filter_transactions_dict:
+        print(f"\n{get_date(dict_.get('date'))} {dict_.get('description')}")
+        if dict_.get("description").split()[0] == "Перевод":
+            print(f"{mask_account_card(dict_.get('from'))} -> {mask_account_card(dict_.get('to'))}")
+            print(
+                f"Сумма: {dict_.get('operationAmount').get('amount')} "
+                f"{dict_.get('operationAmount').get('currency').get('name')}"
+            )
+        else:
+            print(f"{mask_account_card(dict_.get('to'))}")
+            print(
+                f"Сумма: {dict_.get('operationAmount').get('amount')} "
+                f"{dict_.get('operationAmount').get('currency').get('name')}"
+            )
+
 
 if __name__ == "__main__":
-    print("Hello! It's my project!")
-    #
-    # """Функции модуля masks.py"""
-    # # Функция get_mask_card_number
-    # print("\nФункция get_mask_card_number:")
-    # print(get_mask_card_number("1111222233334444"))
-    #
-    # # Функция get_mask_account
-    # print("\nФункция get_mask_account:")
-    # print(get_mask_account("88897745"))
-    #
-    # """Функции модуля processing.py"""
-    # # Функция filter_by_state
-    # print("\nФункция filter_by_state:")
-    # print(
-    #     filter_by_state(
-    #         [
-    #             {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-    #             {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
-    #             {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
-    #             {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
-    #         ],
-    #         "EXECUTED",
-    #     )
-    # )
-    #
-    # # Функция sort_by_date
-    # print("\nФункция sort_by_date:")
-    # sorted_list_dict = sort_by_date(
-    #     [
-    #         {"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-    #         {"id": 939719570, "state": "EXECUTED", "date": "2018-06-30T02:08:58.425572"},
-    #         {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
-    #         {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"},
-    #     ],
-    #     False,
-    # )
-    # for dict_date in sorted_list_dict:
-    #     print(dict_date)
-    #
-    # """Функции модуля widget.py"""
-    # # Функция mask_account_card
-    # print("\nФункция mask_account_card:")
-    # with open(PATH_TO_DATA + name_file, "r", encoding="utf-8") as file:
-    #     for line in file:
-    #         print(mask_account_card(line))
-    #
-    # # Функция get_date
-    # print("\nФункция get_date:")
-    # print(get_date("2024-03-11T02:26:56"))
-
-    # Функция filter_by_currency
-    # transactions = [{
-    #     "id": 939719570,
-    #     "state": "EXECUTED",
-    #     "date": "2018-06-30T02:08:58.425572",
-    #     "operationAmount": {
-    #         "amount": "9824.07",
-    #         "currency": {
-    #             "name": "USD",
-    #             "code": "USD"
-    #         }
-    #     },
-    #     "description": "Перевод организации",
-    #     "from": "Счет 75106830613657916952",
-    #     "to": "Счет 11776614605963066702"
-    # },
-    # {
-    #     "id": 142264268,
-    #     "state": "EXECUTED",
-    #     "date": "2019-04-04T23:20:05.206878",
-    #     "operationAmount": {
-    #         "amount": "79114.93",
-    #         "currency": {
-    #             "name": "USD",
-    #             "code": "USD"
-    #         }
-    #     },
-    #     "description": "Перевод со счета на счет",
-    #     "from": "Счет 19708645243227258542",
-    #     "to": "Счет 75651667383060284188"
-    # },
-    # {
-    #     "id": 102,
-    #     "state": "EXECUTED",
-    #     "date": "2019-04-04T23:20:05.206878",
-    #     "operationAmount": {
-    #         "amount": "79114.93",
-    #         "currency": {
-    #             "name": "RUB",
-    #             "code": "RUB"
-    #         }
-    #     },
-    #     "description": "Перевод со счета на счет",
-    #     "from": "Счет 19708645243227258542",
-    #     "to": "Счет 75651667383060284188"
-    # },
-    # {
-    #     "id": 101,
-    #     "state": "EXECUTED",
-    #     "date": "2019-04-04T23:20:05.206878",
-    #     "operationAmount": {
-    #         "amount": "79114.93",
-    #         "currency": {
-    #             "name": "USD",
-    #             "code": "USD"
-    #         }
-    #     },
-    #     "description": "dzgdfgzdfg",
-    #     "from": "Счет 19708645243227258542",
-    #     "to": "Счет 75651667383060284188"
-    # },
-    # {
-    #     "id": 105,
-    #     "state": "EXECUTED",
-    #     "date": "2019-04-04T23:20:05.206878",
-    #     "operationAmount": {
-    #         "amount": "79114.93",
-    #         "currency": {
-    #             "name": "USD",
-    #             "code": "USD"
-    #         }
-    #     },
-    #     "description": "Перевод со счета на счет",
-    #     "from": "Счет 19708645243227258542",
-    #     "to": "Счет 75651667383060284188"
-    # },]
-    # usd_transactions = filter_by_currency(transactions, "USD")
-    # try:
-    #     for _ in transactions:
-    #         print(next(usd_transactions))
-    # except StopIteration:
-    #     pass
-    #
-    # for card_number in card_number_generator(10, 15):
-    #     print(card_number)
-    # transactions = [{}]
-    #
-    # descriptions = transaction_descriptions(transactions)
-    # for description in descriptions:
-    #     print(description)
-
-    # @log("tet.txt")
-    # def get_func_to_log(func, *args, **kwargs):
-    #     return func(*args, **kwargs)
-    #
-    # get_func_to_log(get_date, get_date)
-
-    # custom_dir = os.path.abspath("./logs")
-    #
-    # with tempfile.NamedTemporaryFile(dir=custom_dir, delete=False) as temp_file:
-    #     filename = temp_file.name
-    #     fil = os.path.basename(filename)
-    #
-    # @log(fil)
-    # def get_func_to_log(func, *args, **kwargs):
-    #     return func(*args, **kwargs)
-    #
-    # def summ_(a, b):
-    #     return a + b
-    #
-    # get_func_to_log(summ_, 2, 4)
-
-    # transactions = get_info_transactions_json("D:\\skypro\\bank_history_widget\\data\\operations.json")
-    # print(convert_amount(transactions[1]))
-    # print(convert_amount(2000.0, "EUR"))
-
-    # print(get_info_transactions_json("D:\\skypro\\bank_history_widget\\data\\operations.json"))
-
-    # print(get_mask_card_number([]))
-    # print(get_mask_account(get_mask_card_number))
-
-    print(read_cvs_files('data\\transactions.csv'))
-    # print(read_excel_files('data\\transactions_excel.xlsx'))
+    print(main())
